@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>잼비의 빵빵한 캔들 읽기 🍞</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<style>
+  :root{
+    --bg:#fdf1de; --card:#fffaf1; --line:#f0e3cd;
+    --ink:#3a2c18; --muted:#8a7654; --faint:#b4a385;
+    --up:#e5423b; --down:#2f6bf0; --flat:#9a8f7c;
+    --bread:#f0b357; --bread-dk:#d98b2b; --bread-soft:#fbe6c4;
+    --ok:#2fae66; --no:#e5675b;
+    --shadow:0 10px 30px rgba(120,80,20,.13);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{background:var(--bg)}
+  body{
+    font-family:'Pretendard',system-ui,sans-serif;color:var(--ink);
+    line-height:1.5;padding:20px 15px 44px;max-width:440px;margin:0 auto;
+    min-height:100vh;
+  }
+  .wrap{animation:fade .35s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+  .bob{animation:bob 2.4s ease-in-out infinite}
+
+  .eyebrow{display:inline-block;font-size:12px;font-weight:800;letter-spacing:.03em;
+    color:var(--bread-dk);background:var(--bread-soft);padding:5px 12px;border-radius:100px}
+  h1{font-size:27px;font-weight:800;letter-spacing:-.02em;line-height:1.22;margin-top:12px}
+  h1 .pt{color:var(--bread-dk)}
+  .lead{color:var(--muted);font-size:14.5px;margin-top:10px}
+
+  .mascot{width:150px;margin:6px auto 2px;display:block}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:22px;
+    box-shadow:var(--shadow);padding:20px}
+
+  .btn{display:block;width:100%;border:none;cursor:pointer;font-family:inherit;
+    font-weight:800;font-size:16px;padding:15px;border-radius:16px;
+    background:var(--bread);color:#4a3410;box-shadow:0 4px 0 var(--bread-dk);
+    transition:transform .06s, box-shadow .06s;letter-spacing:-.01em}
+  .btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--bread-dk)}
+  .btn.ghost{background:var(--card);color:var(--muted);box-shadow:none;border:1px solid var(--line)}
+
+  .intro{text-align:center}
+  .rules{text-align:left;background:var(--bread-soft);border-radius:16px;padding:14px 16px;
+    margin:18px 0;font-size:13.5px;color:#6b5121;line-height:1.7}
+  .rules b{color:var(--bread-dk)}
+
+  .note{margin:18px 0;text-align:left;background:#fff4e0;border:1.5px solid var(--bread);
+    border-radius:16px;padding:15px 16px;font-size:13.5px;color:#6b5121;line-height:1.7}
+  .note b{color:var(--bread-dk)}
+  .note .sub{display:block;margin-top:7px;font-size:12px;color:var(--muted)}
+
+  .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+  .crumbs{display:flex;gap:4px;flex-wrap:wrap;max-width:230px}
+  .crumb{width:8px;height:8px;border-radius:50%;background:var(--line);transition:background .2s}
+  .crumb.on{background:var(--bread)}
+  .qcount{font-size:13px;font-weight:800;color:var(--muted)}
+  .qcard{text-align:center}
+  .qcard svg.chart{width:120px;height:auto;margin:2px auto 0;display:block}
+  .qtext{font-size:18px;font-weight:800;margin:14px 4px 14px;letter-spacing:-.01em;line-height:1.4}
+  .qtip{font-size:12.5px;color:var(--faint);margin:-8px 0 16px}
+  .opts{display:flex;flex-direction:column;gap:10px}
+  .opt{width:100%;text-align:left;border:1.5px solid var(--line);background:#fff;border-radius:14px;
+    padding:14px 15px;font-family:inherit;font-size:14.5px;font-weight:600;color:var(--ink);
+    cursor:pointer;transition:transform .06s,border-color .12s,background .12s;line-height:1.4}
+  .opt:hover{border-color:var(--bread)}
+  .opt:active{transform:scale(.98)}
+  .opt.picked{border-color:var(--bread-dk);background:var(--bread-soft)}
+  .opt .nm{font-weight:800;color:var(--ink)}
+  .opt .ds{font-weight:600;color:var(--muted)}
+
+  .res{text-align:center}
+  .grade{font-size:23px;font-weight:800;margin-top:6px;letter-spacing:-.02em}
+  .score{font-size:15px;color:var(--muted);margin-top:4px}
+  .score b{color:var(--bread-dk);font-size:19px}
+  .review{margin-top:20px;display:flex;flex-direction:column;gap:12px;text-align:left}
+  .rv{border:1px solid var(--line);border-radius:16px;padding:14px 15px;background:#fff}
+  .rv-head{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:800}
+  .rv-head .n{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;
+    font-size:12px;color:#fff;flex:0 0 auto}
+  .rv-head .n.ok{background:var(--ok)} .rv-head .n.no{background:var(--no)}
+  .rv-ans{font-size:13px;margin-top:8px;color:var(--muted);line-height:1.55}
+  .rv-ans .correct{color:var(--ok);font-weight:800}
+  .rv-ans .mine{color:var(--no);font-weight:700}
+  .rv-exp{font-size:13px;margin-top:7px;color:var(--ink);background:var(--bread-soft);
+    border-radius:11px;padding:9px 11px;line-height:1.55}
+  .cta-row{margin-top:20px;display:flex;flex-direction:column;gap:10px}
+
+  .sign{text-align:center;font-size:12px;color:var(--faint);margin-top:22px;line-height:1.6}
+  .sign b{color:var(--muted)}
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+/* ---------- bread mascot ---------- */
+function bread(mood){
+  const mouths={
+    hi:'M50,64 Q60,73 70,64',
+    happy:'M48,62 Q60,76 72,62',
+    meh:'M53,68 H67',
+    sad:'M50,71 Q60,64 70,71'
+  };
+  const steam = (mood==='happy') ? '<path d="M60,10 q4,-6 0,-11" stroke="#e0c79a" stroke-width="2.4" fill="none" stroke-linecap="round"/>' : '';
+  return `<svg class="mascot bob" viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" aria-label="빵 캐릭터">
+    ${steam}
+    <path d="M15,86 L15,54 Q15,18 60,18 Q105,18 105,54 L105,86 Q105,91 100,91 L20,91 Q15,91 15,86 Z"
+      fill="var(--bread)" stroke="var(--bread-dk)" stroke-width="3"/>
+    <path d="M22,40 Q60,26 98,40" stroke="#e0982f" stroke-width="2.4" fill="none" opacity=".5"/>
+    <circle cx="35" cy="70" r="7" fill="#f6c98a" opacity=".8"/>
+    <circle cx="85" cy="70" r="7" fill="#f6c98a" opacity=".8"/>
+    <circle cx="47" cy="56" r="4" fill="#4a3410"/>
+    <circle cx="73" cy="56" r="4" fill="#4a3410"/>
+    <circle cx="48.5" cy="54.5" r="1.3" fill="#fff"/>
+    <circle cx="74.5" cy="54.5" r="1.3" fill="#fff"/>
+    <path d="${mouths[mood]}" stroke="#4a3410" stroke-width="3" fill="none" stroke-linecap="round"/>
+  </svg>`;
+}
+
+/* ---------- candle drawing ---------- */
+function candleSVG(o,c,h,l){
+  const W=120,H=220,pad=14,cx=W/2,hw=24;
+  const y=p=>pad+(100-p)/100*(H-2*pad);
+  const doji=Math.abs(c-o)<3;
+  const col=doji?'var(--flat)':(c>o?'var(--up)':'var(--down)');
+  const bt=y(Math.max(o,c)),bb=y(Math.min(o,c)),bh=Math.max(3,bb-bt);
+  return `<svg class="chart" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
+    <line x1="${cx}" y1="${y(h)}" x2="${cx}" y2="${bt}" stroke="${col}" stroke-width="3.2"/>
+    <line x1="${cx}" y1="${bb}" x2="${cx}" y2="${y(l)}" stroke="${col}" stroke-width="3.2"/>
+    <rect x="${cx-hw}" y="${bt}" width="${hw*2}" height="${bh}" rx="4"
+      fill="${doji?'#fff':col}" stroke="${col}" stroke-width="${doji?3.2:0}"/>
+  </svg>`;
+}
+
+/* ---------- questions (개념 2 + 패턴 4 + 꼬리 2) ---------- */
+const QS=[
+ /* 1. 캔들에 담긴 4가지 정보 */
+ {c:[35,65,86,15], q:'캔들 하나에는 가격 정보가 4개 담겨 있어! 그 4가지는? 🍞', tip:'캔들의 가장 기본 개념',
+  opts:['시가 · 고가 · 저가 · 종가','시가 · 종가 · 거래량 · 등락률','고가 · 저가 · 평균가 · 예상가'], a:0,
+  exp:'정답! 캔들 하나엔 시가(시작)·고가(제일 높음)·저가(제일 낮음)·종가(마감) 4개가 담겨 있어. 몸통은 시가~종가, 꼬리는 고가·저가를 나타내 📏'},
+
+ /* 2. 일봉 캔들 하나의 의미 (기간만 다를 뿐 읽는 법은 같다) */
+ {c:[40,66,86,18], q:'캔들은 기간만 다를 뿐 읽는 법은 똑같아! 그럼 "일봉" 캔들 하나가 담는 건? 📅', tip:'',
+  opts:['하루 동안의 시가·고가·저가·종가','일주일 동안의 가격 흐름','지금 이 순간의 가격 하나'], a:0,
+  exp:'일봉은 "하루치" 캔들이야. 하루 동안의 시가·고가·저가·종가를 하나로 압축한 거지. 주봉이면 1주, 월봉이면 1달 — 기간만 바뀔 뿐 읽는 법은 똑같아! 📅'},
+
+ /* 3. 장대양봉 */
+ {c:[12,88,88,12], q:'몸통이 길~고 꼬리는 거의 없는 빨간 캔들! 이 패턴은? 🔥', tip:'대표 패턴 맞히기',
+  opts:['망치형 : 바닥에서 받쳐준 반등 신호','장대양봉 : 하루종일 사는 힘이 강했어','장대음봉 : 하루종일 파는 힘이 강했어'], a:1,
+  exp:'긴 빨간 몸통 = 장대양봉. 하루 종일 사는 힘이 압도한 강한 상승이야 🔥'},
+
+ /* 4. 장대음봉 */
+ {c:[88,12,88,12], q:'몸통이 길~고 꼬리는 거의 없는 파란 캔들! 이 패턴은? 🥶', tip:'대표 패턴 맞히기',
+  opts:['장대양봉 : 하루종일 사는 힘이 강했어','장대음봉 : 하루종일 파는 힘이 강했어','역망치형 : 바닥에서 위로 치고 올라간 신호'], a:1,
+  exp:'긴 파란 몸통 = 장대음봉. 파는 힘이 압도한 강한 하락이야 🥶'},
+
+ /* 5. 망치형 */
+ {c:[72,82,82,22], q:'몸통은 위에 작게, 아래꼬리가 길~게 달린 캔들! 이 패턴은? 🔨', tip:'대표 패턴 맞히기',
+  opts:['역망치형 : 위꼬리가 긴 반등 시도','망치형 : 바닥에서 받쳐준 반등 신호','장대양봉 : 하루종일 사는 힘이 강했어'], a:1,
+  exp:'몸통 작고 아래꼬리가 길면 = 망치형(해머). 아래로 빠졌다가 저점에서 사주는 힘이 받쳐 올린 반등 신호 🔨'},
+
+ /* 6. 역망치형 */
+ {c:[18,28,78,18], q:'몸통은 아래에 작게, 위꼬리가 길~게 달린 캔들! 이 패턴은?', tip:'대표 패턴 맞히기',
+  opts:['역망치형 : 바닥에서 위로 치고 올라간 신호','망치형 : 바닥에서 받쳐준 반등 신호','장대음봉 : 하루종일 파는 힘이 강했어'], a:0,
+  exp:'몸통 작고 위꼬리가 길면 = 역망치형. 바닥에서 위로 한번 치고 올라가보려는 반등 시도 신호야'},
+
+ /* 7. 윗꼬리 긴 캔들 = 시장 심리 */
+ {c:[40,52,90,34], q:'위로 꼬리가 길~게 달렸어! 이 캔들, 시장에서 무슨 일이 있었을까? ⬆️', tip:'꼬리로 시장 심리 읽기',
+  opts:['위로 올랐다가 팔려서 다시 밀려 내려왔어','아래로 빠졌다가 사줘서 다시 올라왔어','하루종일 조용히 오르기만 했어'], a:0,
+  exp:'긴 윗꼬리 = 장중에 위로 쭉 올랐지만, 고점에서 파는 사람이 쏟아져 다시 밀려 내려온 흔적! "위에서 매도세가 셌다"는 신호라 고점에선 부담 신호로 봐 ⚠️'},
+
+ /* 8. 아래꼬리 긴 캔들 = 시장 심리 */
+ {c:[48,60,66,10], q:'아래로 꼬리가 길~게 달렸어! 이 캔들, 시장에서 무슨 일이 있었을까? ⬇️', tip:'꼬리로 시장 심리 읽기',
+  opts:['위로 올랐다가 팔려서 밀렸어','아래로 빠졌다가 사주는 힘이 받쳐 올렸어','하루종일 조용히 내리기만 했어'], a:1,
+  exp:'긴 아래꼬리 = 장중에 아래로 쭉 빠졌지만, 저점에서 사주는 힘이 받쳐 다시 올라온 흔적! "밑에서 매수세가 셌다"는 신호라 바닥권에선 반등 기대 신호로 봐 🌱'},
+
+ /* 9. 빨간 캔들(양봉) 색 개념 */
+ {c:[30,68,72,26], q:'한국 차트에서 "빨간 캔들"이 뜻하는 건? 🔴', tip:'양봉/음봉 색 개념',
+  opts:['종가가 시가보다 높게 끝났다 (올랐다)','종가가 시가보다 낮게 끝났다 (내렸다)','하루종일 거래가 없었다'], a:0,
+  exp:'한국은 오르면 빨강(양봉)! 빨강 = 종가가 시가보다 위 = 그날 올라서 끝났다는 뜻이야. (미국은 초록/빨강이 반대라 헷갈리지 말자) 🇰🇷'},
+
+ /* 10. 파란 캔들(음봉) 색 개념 */
+ {c:[68,30,74,26], q:'그럼 "파란 캔들"이 뜻하는 건? 🔵', tip:'양봉/음봉 색 개념',
+  opts:['종가가 시가보다 높게 끝났다 (올랐다)','종가가 시가보다 낮게 끝났다 (내렸다)','시가와 종가가 똑같았다'], a:1,
+  exp:'파랑(음봉) = 종가가 시가보다 아래 = 그날 내려서 끝났다는 뜻! 빨강은 위로, 파랑은 아래로 마감 🔵'},
+
+ /* 11. 몸통(네모)의 의미 */
+ {c:[35,65,80,20], q:'캔들의 "몸통(네모)"이 나타내는 건? 📏', tip:'개념 문제',
+  opts:['시가와 종가 사이','고가와 저가 사이','하루 거래량'], a:0,
+  exp:'몸통(네모)은 시가~종가 사이야. 시작가와 끝가를 네모로 그린 거지. 꼬리는 별개로 고가·저가를 나타내 📏'},
+
+ /* 12. 꼬리(선)의 의미 */
+ {c:[40,60,88,12], q:'캔들의 "꼬리(위아래 선)"가 나타내는 건? 🕯️', tip:'개념 문제',
+  opts:['그날의 고가·저가 (최고·최저)','그날의 평균 가격','다음 날 예상 가격'], a:0,
+  exp:'꼬리는 그날 찍은 고가(위꼬리 끝)와 저가(아래꼬리 끝)야. 몸통 밖으로 얼마나 갔다 왔는지 보여주는 흔적이지 🕯️'},
+
+ /* 13. 몸통이 길수록 */
+ {c:[15,85,88,12], q:'몸통이 길~수록 뜻하는 건? 💪', tip:'개념 문제',
+  opts:['그날 한 방향 힘이 강했어','거래가 거의 없었어','가격이 안 움직였어'], a:0,
+  exp:'몸통이 길다 = 시가~종가 차이가 크다 = 그날 한 방향(사자든 팔자든) 힘이 압도적이었다는 뜻! 장대양봉·장대음봉이 대표적이야 💪'},
+
+ /* 14. 십자형(도지) 심리 */
+ {c:[50,50,74,26], q:'몸통이 거의 없는 "십자(도지)" 캔들! 시장 심리는? ✚', tip:'몸통 없는 캔들',
+  opts:['사자·팔자 힘이 팽팽, 방향 고민 중','무조건 다음날 오른다','무조건 다음날 내린다'], a:0,
+  exp:'시가=종가라 몸통이 십자선처럼 보이는 게 도지(십자형)! 사자·팔자가 팽팽한 관망 상태라 추세 전환 신호로 자주 나와. 단, 방향을 확정하진 않아 ✚'},
+
+ /* 15. 캔들 하나만으로 판단? (마무리 교훈) */
+ {c:[30,60,80,22], q:'마지막! 캔들 "하나"만 보고 매매를 정해도 될까? 🤔', tip:'제일 중요한 마무리',
+  opts:['아니, 추세·거래량 등과 함께 봐야 해','응, 캔들 하나면 충분해','캔들 색만 보면 돼'], a:0,
+  exp:'캔들은 강력한 힌트지만 "하나만" 보고 판단하면 위험해! 추세·거래량·지지저항 같은 다른 요소랑 결합해서 봐야 진짜 신호가 보여. 그래서 외우기만 하면 안 되는 거야 💛'},
+];
+
+/* ---------- state ---------- */
+let qi=0, picks=[];
+const app=document.getElementById('app');
+
+/* 보기 렌더: " : " 가 있으면 앞부분(이름)을 굵게 */
+function optHTML(o){
+  const idx=o.indexOf(' : ');
+  if(idx<0) return o;
+  return `<span class="nm">${o.slice(0,idx)}</span> : <span class="ds">${o.slice(idx+3)}</span>`;
+}
+
+function intro(){
+  app.innerHTML=`<div class="wrap intro">
+    <span class="eyebrow">잼비의 자료나눔 · 미니게임</span>
+    <h1>빵빵이의 <span class="pt">캔들 읽기</span><br>퀴즈 🍞</h1>
+    ${bread('hi')}
+    <p class="lead">${QS.length}문제로 "캔들 읽는 법"을 익혀보자 칭구들!<br>기본 개념부터 대표 패턴, 꼬리 심리까지 👀</p>
+    <div class="rules">
+      🍞 <b>총 ${QS.length}문제</b> — 개념 + 패턴 + 꼬리 심리<br>
+      🤫 정답은 <b>중간에 안 알려줌</b> — 끝까지 감으로!<br>
+      🎉 <b>마지막에 한 번에 공개</b> + 빵 심리 등급 발표
+    </div>
+    <button class="btn" onclick="start()">빵빵이랑 시작하기 →</button>
+    <p class="sign"><b>캔들은 참고용이지 정답이 아니야</b><br>투자 판단은 언제나 내 몫 💛</p>
+  </div>`;
+}
+
+function start(){ qi=0; picks=[]; question(); }
+
+function question(){
+  const Q=QS[qi];
+  const crumbs=QS.map((_,i)=>`<span class="crumb ${i<=qi?'on':''}"></span>`).join('');
+  app.innerHTML=`<div class="wrap">
+    <div class="top">
+      <div class="crumbs">${crumbs}</div>
+      <div class="qcount">🍞 ${qi+1} / ${QS.length}</div>
+    </div>
+    <div class="card qcard">
+      ${candleSVG(...Q.c)}
+      <div class="qtext">${Q.q}</div>
+      ${Q.tip ? `<div class="qtip">${Q.tip}</div>` : ''}
+      <div class="opts">
+        ${Q.opts.map((o,i)=>`<button class="opt" data-i="${i}">${optHTML(o)}</button>`).join('')}
+      </div>
+    </div>
+  </div>`;
+  app.querySelectorAll('.opt').forEach(b=>{
+    b.addEventListener('click',()=>{
+      app.querySelectorAll('.opt').forEach(x=>x.classList.remove('picked'));
+      b.classList.add('picked');
+      picks[qi]=+b.dataset.i;
+      setTimeout(()=>{ qi++; qi<QS.length ? question() : result(); },360);
+    });
+  });
+}
+
+function result(){
+  const score=picks.filter((p,i)=>p===QS[i].a).length;
+  let mood,grade;
+  if(score===QS.length){mood='happy';grade='캔들 읽기 마스터 빵빵이 👑';}
+  else if(score>=11){mood='happy';grade='노릇노릇 잘 구워진 빵 🥐';}
+  else if(score>=6){mood='hi';grade='제법인데? 반쯤 구워졌어 🍞';}
+  else if(score>=1){mood='meh';grade='아직 반죽 단계 🫓 다시 구워보자';}
+  else {mood='sad';grade='밀가루 상태 😅 첨부터 다시!';}
+
+  const review=QS.map((Q,i)=>{
+    const ok=picks[i]===Q.a;
+    const mineTxt = ok ? '' : `<br><span class="mine">내 선택: ${Q.opts[picks[i]]}</span>`;
+    return `<div class="rv">
+      <div class="rv-head"><span class="n ${ok?'ok':'no'}">${ok?'✓':'✕'}</span> ${i+1}번 문제</div>
+      <div class="rv-ans"><span class="correct">정답: ${Q.opts[Q.a]}</span>${mineTxt}</div>
+      <div class="rv-exp">${Q.exp}</div>
+    </div>`;
+  }).join('');
+
+  app.innerHTML=`<div class="wrap res">
+    <span class="eyebrow">🎉 결과 공개</span>
+    ${bread(mood)}
+    <div class="grade">${grade}</div>
+    <div class="score">${QS.length}문제 중 <b>${score}개</b> 정답!</div>
+    <div class="review">${review}</div>
+    <div class="note">
+      ⚠️ <b>캔들은 단순히 외우기만 하면 안 돼요!</b><br>
+      반드시 <b>추세·위치·거래량</b> 같은 다른 요소랑 <b>결합해서</b> 봐야 진짜 뜻이 보여요.
+      <span class="sub">(똑같이 생긴 캔들도 "어디서 나왔냐"에 따라 신호가 갈려요!)</span>
+    </div>
+    <div class="cta-row">
+      <button class="btn" onclick="start()">🍞 다시 굽기 (재도전)</button>
+      <button class="btn ghost" onclick="intro()">처음으로</button>
+    </div>
+    <p class="sign"><b>캔들은 시장 심리를 읽는 힌트일 뿐</b><br>투자 판단은 언제나 내 몫이야 💛<br>— 잼비 @jam._bi</p>
+  </div>`;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+intro();
+</script>
+</body>
+</html>
